@@ -362,7 +362,7 @@ const Index = () => {
             Ready to Start Your Project?
           </h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of students who have successfully completed their final year projects with our support
+            Too lazy to make your final year project? No worries — we've got your back. Let us handle the hard stuff while you chill (a little).
           </p>
           <Link to="/idea-generator">
             <Button size="lg" variant="secondary">
