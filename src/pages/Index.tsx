@@ -57,48 +57,95 @@ const Index = () => {
     }
   ];
 
-  const pricingPlans = [
+  const softwarePlans = [
     {
       name: "Basic Plan",
-      price: "₹49",
+      price: "₹1,000",
       period: "project",
-      description: "Essential support for individual projects",
+      description: "Code review and improvement advice",
       features: [
-        "Basic plan",
-        "Email support",
-        "Technical assistance",
-        "Collaboration tools"
+        "Project advice and consultation",
+        "Code review and improvements",
+        "Technical guidance",
+        "Email support"
       ]
     },
     {
       name: "Standard Plan",
-      price: "₹99",
+      price: "₹5,000",
       period: "project",
-      description: "Comprehensive features for team projects",
+      description: "Complete full-stack web app with up to 4 pages",
       features: [
-        "Project guidance",
-        "Priority support",
-        "Technical assistance",
-        "Collaboration tools",  
-        "Team support",
-        "Progress tracking"
+        "Full-stack web application",
+        "Maximum 4 pages",
+        "Basic authentication",
+        "Database integration",
+        "Responsive design",
+        "Technical documentation"
       ],
       popular: true
     },
     {
       name: "Premium Plan",
-      price: "₹199",
+      price: "₹9,000",
       period: "project",
-      description: "Complete support with advanced features",
+      description: "Advanced full-stack app with 8+ pages and complete documentation",
       features: [
-        "All previous features",
-        "Priority support",
-        "One-on-one mentoring",
-        "Code review",
-        "Team support",
-        "Progress tracking",
-        "Presentation review",
-        "Dedicated mentor"
+        "Full-stack web application",
+        "8+ pages included",
+        "Complete login/signup system",
+        "Client preferred database",
+        "Advanced features",
+        "Complete documentation",
+        "System diagrams included",
+        "Priority support"
+      ]
+    }
+  ];
+
+  const hardwarePlans = [
+    {
+      name: "Basic Plan",
+      price: "₹1,500",
+      period: "project",
+      description: "Simple hardware project with basic sensors",
+      features: [
+        "Up to 4 sensors maximum",
+        "Basic code for hardware",
+        "No internet connectivity",
+        "No cloud dashboard",
+        "Components NOT included",
+        "You buy components yourself"
+      ]
+    },
+    {
+      name: "Standard Plan", 
+      price: "₹5,000",
+      period: "project",
+      description: "Advanced project with cloud connectivity",
+      features: [
+        "Up to 9 sensors",
+        "Blynk cloud connectivity",
+        "We source components at best prices",
+        "Internet connectivity included",
+        "Cloud dashboard setup",
+        "Components NOT included"
+      ],
+      popular: true
+    },
+    {
+      name: "Premium Plan",
+      price: "₹9,000", 
+      period: "project",
+      description: "Complex IoT project with full documentation",
+      features: [
+        "15+ sensors supported",
+        "Blynk cloud integration",
+        "WiFi connectivity",
+        "API data connections",
+        "Complex project architecture",
+        "Complete documentation",
+        "Components NOT included"
       ]
     }
   ];
@@ -207,20 +254,20 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Affordable Pricing Plans */}
+      {/* Software Project Pricing Plans */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Affordable Pricing Plans
+              Software Project Plans
             </h2>
             <p className="text-xl text-gray-600">
-              Choose a plan that fits your needs and budget
+              Choose a plan for your web development project
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+            {softwarePlans.map((plan, index) => (
               <Card key={index} className={`relative ${plan.popular ? 'ring-2 ring-blue-600 scale-105' : ''}`}>
                 {plan.popular && (
                   <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600">
@@ -239,6 +286,58 @@ const Index = () => {
                 </CardHeader>
                 <CardContent>
                   <Button className={`w-full mb-6 ${plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}>
+                    Select Plan
+                  </Button>
+                  <ul className="space-y-3">
+                    {plan.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center">
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hardware Project Pricing Plans */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Hardware Project Plans
+            </h2>
+            <p className="text-xl text-gray-600">
+              Choose a plan for your IoT and hardware projects
+            </p>
+            <p className="text-sm text-red-600 mt-2 font-medium">
+              Note: All hardware plans require you to purchase components separately
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {hardwarePlans.map((plan, index) => (
+              <Card key={index} className={`relative ${plan.popular ? 'ring-2 ring-green-600 scale-105' : ''}`}>
+                {plan.popular && (
+                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-green-600">
+                    Most Popular
+                  </Badge>
+                )}
+                <CardHeader className="text-center">
+                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                  <div className="flex items-center justify-center mt-4">
+                    <span className="text-4xl font-bold">{plan.price}</span>
+                    <span className="text-gray-600 ml-2">/{plan.period}</span>
+                  </div>
+                  <CardDescription className="mt-2">
+                    {plan.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button className={`w-full mb-6 ${plan.popular ? 'bg-green-600 hover:bg-green-700' : ''}`}>
                     Select Plan
                   </Button>
                   <ul className="space-y-3">
