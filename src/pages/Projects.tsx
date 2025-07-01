@@ -1,4 +1,3 @@
-
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -15,7 +14,12 @@ import {
   Wifi,
   Camera,
   Download,
-  ExternalLink
+  ExternalLink,
+  Bot,
+  Heart,
+  Leaf,
+  Home,
+  Keyboard
 } from "lucide-react";
 
 const Projects = () => {
@@ -27,69 +31,58 @@ const Projects = () => {
   const projects = [
     {
       id: 1,
-      title: "Full-Stack Web Application for E-commerce Platform",
-      description: "Develop a comprehensive e-commerce platform with user authentication, product catalog, shopping cart, payment integration. Utilize modern technologies like React, Node.js, and MongoDB.",
+      title: "Guardian: AI Chatbot for DSA Problem Solving",
+      description: "A sleek AI chatbot built to assist students with DSA problems. Includes login/signup, chat renaming, and deletion. Ready for production use.",
       category: "Web Applications",
-      icon: <Globe className="w-6 h-6" />,
-      tags: ["React", "Node.js", "MongoDB", "Stripe"],
-      difficulty: "Intermediate",
+      icon: <Bot className="w-6 h-6" />,
+      tags: ["React", "Firebase", "GPT", "Chatbot"],
+      difficulty: "Advanced",
       duration: "6-8 weeks",
-      price: "₹2999"
+      price: "₹6000"
     },
     {
       id: 2,
-      title: "IoT-Based Smart Home Automation System",
-      description: "Create a smart home system using Arduino & Raspberry Pi. Implement features like remote control of lights, temperature monitoring, and mobile app for user interaction.",
-      category: "IoT Projects",
-      icon: <Cpu className="w-6 h-6" />,
-      tags: ["Arduino", "Raspberry Pi", "IoT", "Mobile App"],
-      difficulty: "Advanced",
-      duration: "8-10 weeks",
-      price: "₹3999"
+      title: "MindMate: Mental Health Support Chatbot",
+      description: "A minimalist chatbot app for mental health support. Includes login/signup, chat interface, and delete function.",
+      category: "Web Applications",
+      icon: <Heart className="w-6 h-6" />,
+      tags: ["Flask", "Python", "Mental Health"],
+      difficulty: "Beginner",
+      duration: "4-6 weeks",
+      price: "₹2000"
     },
     {
       id: 3,
-      title: "Hardware Project: Autonomous Drone for Surveillance",
-      description: "Design and build an autonomous drone capable of surveillance and data collection. Incorporates computer vision, GPS navigation, and remote monitoring capabilities.",
-      category: "Hardware Projects",
-      icon: <Camera className="w-6 h-6" />,
-      tags: ["Drone", "Computer Vision", "GPS", "Surveillance"],
-      difficulty: "Expert",
-      duration: "10-12 weeks",
-      price: "₹4999"
+      title: "Plant Monitoring System",
+      description: "Automatically waters plants when soil is dry using a moisture sensor and ESP32. Real-time control and monitoring via Blynk web app.",
+      category: "IoT Projects",
+      icon: <Leaf className="w-6 h-6" />,
+      tags: ["ESP32", "Blynk", "IoT", "Soil Sensor"],
+      difficulty: "Intermediate",
+      duration: "6-8 weeks",
+      price: "₹2000"
     },
     {
       id: 4,
-      title: "Mobile App for Fitness Tracking",
-      description: "Create a mobile application designed for fitness activities including running, cycling, and swimming. Implement features like GPS tracking, social features, and progress visualization.",
-      category: "Web Applications",
-      icon: <Smartphone className="w-6 h-6" />,
-      tags: ["React Native", "GPS", "Fitness", "Social"],
-      difficulty: "Intermediate",
-      duration: "6-8 weeks",
-      price: "₹2499"
+      title: "Home Automation System",
+      description: "Control home appliances like fans, lights, and TVs using Arduino and a Python app. Simple and effective home automation system.",
+      category: "Hardware Projects",
+      icon: <Home className="w-6 h-6" />,
+      tags: ["Arduino", "Python", "Relay"],
+      difficulty: "Beginner",
+      duration: "4-6 weeks",
+      price: "₹1500"
     },
     {
       id: 5,
-      title: "Web Application for Project Management",
-      description: "Create a web application for managing projects, tasks, and team collaboration. Features include task assignment, progress tracking, file sharing, and communication tools.",
-      category: "Web Applications",
-      icon: <Database className="w-6 h-6" />,
-      tags: ["Project Management", "Collaboration", "Task Tracking"],
-      difficulty: "Intermediate",
-      duration: "7-9 weeks",
-      price: "₹2799"
-    },
-    {
-      id: 6,
-      title: "IoT Project: Environmental Monitoring System",
-      description: "Build an environmental monitoring system using sensors and microcontrollers. Collect data on air quality, temperature, humidity, and other environmental factors.",
-      category: "IoT Projects",
-      icon: <Wifi className="w-6 h-6" />,
-      tags: ["Sensors", "Environmental", "Data Collection", "IoT"],
-      difficulty: "Advanced",
+      title: "MacroPad: ESP32 Bluetooth Macro Controller",
+      description: "A high-end macro keypad with OLED display, rotary encoder, and 9 programmable buttons. Connects via Bluetooth with customizable profiles.",
+      category: "Hardware Projects",
+      icon: <Keyboard className="w-6 h-6" />,
+      tags: ["ESP32", "Bluetooth", "MacroPad", "OLED"],
+      difficulty: "Expert",
       duration: "8-10 weeks",
-      price: "₹3499"
+      price: "₹3000"
     }
   ];
 
