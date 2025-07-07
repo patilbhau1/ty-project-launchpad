@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { MessageCircle, Mail, Phone } from "lucide-react";
 const Footer = () => {
   const openWhatsApp = () => {
-    window.open("https://wa.me/1234567890?text=Hi! I need help with TY projects", "_blank");
+    window.open("https://wa.me/+917506750982?text=Hi! I need help with TY projects", "_blank");
   };
   return <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

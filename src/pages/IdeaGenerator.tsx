@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +12,7 @@ import axios from 'axios';
 import Reactmarkedown from 'react-markdown';
 
 const IdeaGenerator = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", interests: "" });
+  const [formData, setFormData] = useState({ name: "", phoneNo: "", interests: "" });
   const [generatedIdea, setGeneratedIdea] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showIdea, setShowIdea] = useState(false);
@@ -56,13 +57,34 @@ const IdeaGenerator = () => {
     console.log('New idea request:', { ...formData, idea, time: new Date().toISOString() });
   };
 
-  const handleSubmitIdea = () => {
-    console.log('Submitting idea:', { ...formData, projectIdea: generatedIdea, time: new Date().toISOString() });
+
+  const handleSubmitIdea = async () => {
+    const { name, phoneNo, interests } = formData;
+    const idea = generatedIdea;
+    const phoneNum = parseInt(phoneNo);
+    // 2. Insert into Supabase
+    const { error } = await supabase.from("ideas").insert([{
+      name,
+      phoneno : phoneNum,
+      interests,
+      idea,
+    },
+    ]);
+
+    // 3. Error handling
+    if (error) {
+      console.error("Supabase insert error:", error.message);
+      alert("Failed to submit your idea. Try again.");
+      return;
+    }
+
+    // 4. Success flow
     alert("Your project idea has been submitted! We'll contact you soon.");
-    setFormData({ name: "", email: "", interests: "" });
+    setFormData({ name: "", phoneNo: "", interests: "" });
     setGeneratedIdea("");
     setShowIdea(false);
   };
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -89,9 +111,18 @@ const IdeaGenerator = () => {
                   <Input id="name" name="name" value={formData.name} onChange={handleInputChange} required />
                 </div>
                 <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
-                </div>
+                  <Label htmlFor="phoneno">Phone Number</Label>
+                  <Input
+                    id="phoneNo"
+                    name="phoneNo"
+                    type="tel"
+                    maxLength={10}
+                    value={formData.phoneNo}
+                    onChange={handleInputChange}
+                    placeholder="e.g. 9876543210"
+                    required
+                  />
+                  </div>
                 <div>
                   <Label htmlFor="interests">Interests</Label>
                   <Textarea id="interests" name="interests" value={formData.interests} onChange={handleInputChange} required rows={4} />
@@ -116,7 +147,7 @@ const IdeaGenerator = () => {
                       <Reactmarkedown>
                         {generatedIdea}
                       </Reactmarkedown>
-                      }</p>
+                    }</p>
                   </div>
                   <Button onClick={handleSubmitIdea} className="mr-2">Submit Idea</Button>
                   <Button variant="outline" onClick={handleSubmit}>New Idea</Button>
