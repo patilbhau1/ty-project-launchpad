@@ -38,7 +38,8 @@ const Projects = () => {
       tags: ["React", "Firebase", "GPT", "Chatbot"],
       difficulty: "Advanced",
       duration: "6-8 weeks",
-      price: "₹6000"
+      price: "₹6000",
+      url: "https://guardianapp.vercel.app"
     },
     {
       id: 2,
@@ -49,7 +50,8 @@ const Projects = () => {
       tags: ["Flask", "Python", "Mental Health"],
       difficulty: "Beginner",
       duration: "4-6 weeks",
-      price: "₹2000"
+      price: "₹2000",
+      url: "https://pravin111.pythonanywhere.com/"
     },
     {
       id: 3,
@@ -60,7 +62,8 @@ const Projects = () => {
       tags: ["ESP32", "Blynk", "IoT", "Soil Sensor"],
       difficulty: "Intermediate",
       duration: "6-8 weeks",
-      price: "₹2000"
+      price: "₹2000",
+      url: "#"
     },
     {
       id: 4,
@@ -71,7 +74,8 @@ const Projects = () => {
       tags: ["Arduino", "Python", "Relay"],
       difficulty: "Beginner",
       duration: "4-6 weeks",
-      price: "₹1500"
+      price: "₹1500",
+      url: "#"
     },
     {
       id: 5,
@@ -82,7 +86,8 @@ const Projects = () => {
       tags: ["ESP32", "Bluetooth", "MacroPad", "OLED"],
       difficulty: "Expert",
       duration: "8-10 weeks",
-      price: "₹3000"
+      price: "₹3000",
+      url: "#"
     }
   ];
 
@@ -101,6 +106,20 @@ const Projects = () => {
       case "Expert": return "bg-red-100 text-red-800";
       default: return "bg-gray-100 text-gray-800";
     }
+  };
+
+  const handleGetProject = (project: any) => {
+    const hardwareNumber = "917506750982";
+    const softwareNumber = "918828016278";
+    const message = "Hi! I need help with TY projects";
+    let url = "";
+
+    if (project.category === "Hardware Projects" || project.category === "IoT Projects") {
+      url = `https://wa.me/${hardwareNumber}?text=${encodeURIComponent(message)}`;
+    } else {
+      url = `https://wa.me/${softwareNumber}?text=${encodeURIComponent(message)}`;
+    }
+    window.open(url, "_blank");
   };
 
   return (
@@ -196,10 +215,10 @@ const Projects = () => {
                   <div className="flex items-center justify-between pt-4">
                     <span className="text-2xl font-bold text-blue-600">{project.price}</span>
                     <div className="flex space-x-2">
-                      <Button size="sm" variant="outline">
+                      <Button onClick={() => window.open(project.url, "_blank")} size="sm" variant="outline">
                         <ExternalLink className="w-4 h-4" />
                       </Button>
-                      <Button size="sm">
+                      <Button onClick={() => handleGetProject(project)} size="sm">
                         <Download className="w-4 h-4 mr-1" />
                         Get Project
                       </Button>

@@ -16,8 +16,33 @@ import {
   Globe,
   Wifi
 } from "lucide-react";
+import { useState } from "react";
+import Chatbot from "@/components/Chatbot";
 
 const Index = () => {
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
+  const handleSelectPlan = (plan) => {
+    setSelectedPlan(plan);
+    setIsChatbotOpen(true);
+  };
+
+  const handleCloseChatbot = () => {
+    setIsChatbotOpen(false);
+    setSelectedPlan(null);
+  };
+
+  const handleFinalize = (messages) => {
+    const conversation = messages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+    const hardwareNumber = "917506750982";
+    const softwareNumber = "918828016278";
+    const planType = selectedPlan.name.toLowerCase().includes('software') ? 'software' : 'hardware';
+    const number = planType === 'software' ? softwareNumber : hardwareNumber;
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(conversation)}`;
+    window.open(url, '_blank');
+    handleCloseChatbot();
+  };
   const features = [
     {
       icon: <Code className="w-6 h-6" />,
@@ -285,7 +310,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button className={`w-full mb-6 ${plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}>
+                  <Button onClick={() => handleSelectPlan(plan)} className={`w-full mb-6 ${plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}>
                     Select Plan
                   </Button>
                   <ul className="space-y-3">
@@ -337,7 +362,7 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button className={`w-full mb-6 ${plan.popular ? 'bg-green-600 hover:bg-green-700' : ''}`}>
+                  <Button onClick={() => handleSelectPlan(plan)} className={`w-full mb-6 ${plan.popular ? 'bg-green-600 hover:bg-green-700' : ''}`}>
                     Select Plan
                   </Button>
                   <ul className="space-y-3">
@@ -374,6 +399,13 @@ const Index = () => {
       </section>
 
       <Footer />
+      {isChatbotOpen && (
+        <Chatbot
+          plan={selectedPlan}
+          onClose={handleCloseChatbot}
+          onFinalize={handleFinalize}
+        />
+      )}
     </div>
   );
 };

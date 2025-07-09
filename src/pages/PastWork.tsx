@@ -30,7 +30,7 @@ const PastWork = () => {
         "Google Maps + GPS integration",
         "Custom vision-language models"
       ],
-      buildCost: "₹15,000",
+      buildCost: "₹46,000",
       student: "Internal Research Project",
       tags: ["Raspberry Pi", "YOLOv8", "Navigation AI", "GPS", "VLM"],
       icon: <Eye className="w-8 h-8" />,
