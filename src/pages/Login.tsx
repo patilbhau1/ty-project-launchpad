@@ -1,29 +1,47 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate login process
-    setTimeout(() => {
-      setIsLoading(false);
-      console.log("Login attempt:", { email, password });
-    }, 1000);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      navigate("/");
+    }
+    setIsLoading(false);
+  };
+
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+    if (error) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -99,6 +117,14 @@ const Login = () => {
                   disabled={isLoading}
                 >
                   {isLoading ? "Signing in..." : "Log in"}
+                </Button>
+
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={handleGoogleLogin}
+                >
+                  <FcGoogle />Login with Google
                 </Button>
 
                 <div className="text-center text-sm">
