@@ -20,10 +20,20 @@ import { useState } from "react";
 import Chatbot from "@/components/Chatbot";
 
 const Index = () => {
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  interface Plan {
+    name: string;
+    price: string;
+    period: string;
+    description: string;
+    features: string[];
+    popular?: boolean;
+    highlighted?: boolean;
+  }
+
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
-  const handleSelectPlan = (plan) => {
+  const handleSelectPlan = (plan: Plan) => {
     setSelectedPlan(plan);
     setIsChatbotOpen(true);
   };
@@ -34,14 +44,36 @@ const Index = () => {
   };
 
   const handleFinalize = (messages) => {
-    const conversation = messages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
-    const hardwareNumber = "917506750982";
-    const softwareNumber = "918828016278";
-    const planType = selectedPlan.name.toLowerCase().includes('software') ? 'software' : 'hardware';
-    const number = planType === 'software' ? softwareNumber : hardwareNumber;
-    const url = `https://wa.me/${number}?text=${encodeURIComponent(conversation)}`;
-    window.open(url, '_blank');
-    handleCloseChatbot();
+    try {
+      // Extract the conversation summary from the last system message if available
+      const lastMessage = messages[messages.length - 1];
+      const summary = lastMessage?.role === 'system' ? lastMessage.content : 
+        messages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+      
+      const hardwareNumber = "917506750982";
+      const softwareNumber = "918828016278";
+      const planType = selectedPlan?.name?.toLowerCase().includes('software') ? 'software' : 'hardware';
+      const number = planType === 'software' ? softwareNumber : hardwareNumber;
+      
+      // Create a more structured WhatsApp message
+      const projectTitle = selectedPlan?.name || 'Project';
+      const whatsappMessage = `*New ${projectTitle} Inquiry*\n\n${summary}\n\n[This message was generated from the Project Launchpad]`;
+      
+      const url = `https://wa.me/${number}?text=${encodeURIComponent(whatsappMessage)}`;
+      
+      // Open in a new tab
+      window.open(url, '_blank');
+      
+      // Close the chatbot after a short delay
+      setTimeout(() => {
+        handleCloseChatbot();
+      }, 500);
+    } catch (error) {
+      console.error('Error finalizing chat:', error);
+      // Fallback in case of error
+      alert('Failed to open WhatsApp. Please try again or contact support.');
+      handleCloseChatbot();
+    }
   };
   const features = [
     {
@@ -399,12 +431,14 @@ const Index = () => {
       </section>
 
       <Footer />
-      {isChatbotOpen && (
-        <Chatbot
-          plan={selectedPlan}
-          onClose={handleCloseChatbot}
-          onFinalize={handleFinalize}
-        />
+      {isChatbotOpen && selectedPlan && (
+        <div className="fixed inset-0 z-50">
+          <Chatbot
+            plan={selectedPlan}
+            onClose={handleCloseChatbot}
+            onFinalize={handleFinalize}
+          />
+        </div>
       )}
     </div>
   );
