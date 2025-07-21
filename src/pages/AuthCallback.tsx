@@ -1,26 +1,26 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
 export default function AuthCallback() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const handleAuth = async () => {
       try {
-        // Clean up the URL by removing the hash and any query parameters
-        if (window.location.hash) {
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
-
-        const { data, error } = await supabase.auth.getSession();
+        // First, let Supabase process the OAuth data from the URL
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
         if (error) throw error;
         
-        if (data.session) {
-          // Successfully authenticated, redirect to home
+        if (session) {
+          // Clean up the URL after successful auth
+          window.history.replaceState({}, document.title, window.location.pathname);
+          // Redirect to home
           navigate('/', { replace: true });
         } else {
-          // No session found, redirect to login
+          // If no session, redirect to login
           navigate('/login', { replace: true });
         }
       } catch (error) {
