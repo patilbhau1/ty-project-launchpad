@@ -10,6 +10,7 @@ import PastWork from "./pages/PastWork";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import IdeaGenerator from "./pages/IdeaGenerator";
+import ApprovedIdeaPage from "./pages/ApprovedIdeaPage";
 import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/idea-generator" element={<IdeaGenerator />} />
+          <Route path="/approved-idea" element={<ApprovedIdeaPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

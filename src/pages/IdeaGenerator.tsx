@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { Lightbulb, Send, User, MessageSquare } from "lucide-react";
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Reactmarkedown from 'react-markdown';
 
@@ -16,6 +18,7 @@ const IdeaGenerator = () => {
   const [generatedIdea, setGeneratedIdea] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showIdea, setShowIdea] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -160,6 +163,39 @@ const IdeaGenerator = () => {
         </div>
       </section>
 
+      {/* Floating Animated Button */}
+      <motion.div 
+        className="fixed bottom-8 right-8 z-40"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <motion.button
+          onClick={() => navigate('/approved-idea')}
+          className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full shadow-lg font-medium text-lg flex items-center space-x-2"
+          animate={{
+            boxShadow: [
+              '0 0 0 0 rgba(124, 58, 237, 0.7)',
+              '0 0 0 15px rgba(124, 58, 237, 0)',
+              '0 0 0 0 rgba(124, 58, 237, 0)'
+            ]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatType: 'loop'
+          }}
+        >
+          <span>Got Approved Idea?</span>
+          <motion.span
+            animate={{ rotate: 360 }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+          >
+            💡
+          </motion.span>
+        </motion.button>
+      </motion.div>
       <Footer />
     </div>
   );
