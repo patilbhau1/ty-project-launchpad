@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { supabase } from '@/integrations/supabase/client';
 
 const ApprovedIdeaPage = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const ApprovedIdeaPage = () => {
     approvedIdea: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -25,17 +27,40 @@ const ApprovedIdeaPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
+    setIsSubmitting(true);
 
-    // Reset form after submission
-    setTimeout(() => {
-      setFormData({ name: '', phone: '', approvedIdea: '' });
-      navigate('/idea-generator');
-    }, 3000);
+    try {
+      // Insert into Supabase approvedIdeas table
+      const { error } = await supabase.from("approvedideas").insert([{
+        name: formData.name,
+        phone: formData.phone,
+        approvedidea: formData.approvedIdea,
+      }]);
+
+      // Error handling
+      if (error) {
+        console.error("Supabase insert error:", error.message);
+        alert("Failed to submit your approved idea. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Success flow
+      setIsSubmitted(true);
+      
+      // Show success message and redirect after 3 seconds
+      setTimeout(() => {
+        setFormData({ name: '', phone: '', approvedIdea: '' });
+        navigate('/idea-generator');
+      }, 3000);
+
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("An unexpected error occurred. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -106,14 +131,21 @@ const ApprovedIdeaPage = () => {
             <button
               type="submit"
               className="w-full py-2 px-4 border border-white/20 rounded-lg text-black font-bold bg-[#FB7938]"
-              disabled={isSubmitted}
+              disabled={isSubmitting || isSubmitted}
             >
-              {isSubmitted ? 'Submitting...' : 'Submit Idea'}
+              {isSubmitting ? 'Submitting...' : isSubmitted ? 'Submitted' : 'Submit Idea'}
             </button>
 
             {isSubmitted && (
-              <div className="mt-4 p-2 bg-green-100 text-green-800 rounded">
-                Thank you for your submission! Redirecting...
+              <div className="mt-4 p-4 bg-green-900/30 border border-green-500/30 text-green-400 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-semibold">Success!</span>
+                </div>
+                <p className="text-sm">
+                  Your approved idea has been successfully submitted! We'll review it and reach out to you soon to discuss the next steps.
+                </p>
+                <p className="text-xs mt-2 opacity-75">Redirecting to idea generator...</p>
               </div>
             )}
           </form>
