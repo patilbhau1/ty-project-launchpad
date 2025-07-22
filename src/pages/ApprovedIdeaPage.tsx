@@ -64,14 +64,14 @@ const ApprovedIdeaPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="h-[100dvh] bg-black text-white flex flex-col overflow-hidden">
       <div className="relative flex-shrink-0">
         <div className="w-full flex justify-center items-center px-4 pt-10">
           <div className='font-bugeria z-10 text-4xl'>
             <h1>Got Your Own Custom Idea</h1>
           </div>
         </div>
-        <div className='absolute top-0 left-0 right-0 h-60 bg-gradient-to-b from-[#1a1a1a] via-black/40 to-transparent pointer-events-none'></div>
+        <div className='absolute top-0 left-0 right-0 h-60 bg-gradient-to-b from-[#1b1b1b] via-black/40 to-transparent pointer-events-none'></div>
       </div>
       <main className='flex-1 h-full w-full flex items-center justify-center p-4'>
         <div className='w-full max-w-[400px] mx-auto'>
@@ -151,7 +151,7 @@ const ApprovedIdeaPage = () => {
           </form>
         </div>
       </main>
-      <footer className="relative w-full h-40 flex-shrink-0 overflow-hidden">
+      <footer className="relative w-full flex-shrink-0 -mt-2 overflow-hidden" style={{ height: 'calc(6rem + env(safe-area-inset-bottom))' }}>
         <div className="absolute inset-0">
           <video
             src="/video/0721.mp4"
@@ -162,9 +162,9 @@ const ApprovedIdeaPage = () => {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <p className="text-2xl flex flex-row md:text-4xl font-feasy text-white">
-            made with&nbsp;<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={0.5} stroke="currentColor" className="size-6">
+        <div className="absolute inset-0 bg-black/40 px-4 flex flex-row items-end justify-center">
+          <p className="text-xs text-center flex flex-row p-5 md:p-0 font-bugeria font-ultra-thin text-white/60">
+            made with&nbsp;<svg xmlns="http://www.w3.org/2000/svg" color='pink' fill="none" viewBox="0 0 24 24" strokeWidth={0.5} stroke="currentColor" className="size-4 inline-block">
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
             </svg>
             &nbsp;by Akhilesh

@@ -94,6 +94,9 @@ export default {
 				bugeria : ['Bricolage Grotesque' , 'sans-serif'],
 				poyp : ['Poppins', 'sans-serif'],
 				feasy : ['Feasibly', 'sans-serif'],
+			},
+			fontWeight:{
+				'ultra-thin': '50',
 			}
 		}
 	},
