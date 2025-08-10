@@ -24,25 +24,26 @@ const IdeaGenerator = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-  const apiUrl = import.meta.env.VITE_OPENROUTER_API_URI;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const apiUrl = import.meta.env.VITE_GEMINI_API_URI;
 
   const generateProjectIdea = async (interests: string) => {
     const systemPrompt = `You are a final year engineering project guide. Generate a unique and practical software project idea based on the user's interests. Be specific, innovative in just less than 40 words, and mention the tech stack if relevant.`;
     const payload = {
-      model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: `My interests are: ${interests}` },
-      ],
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: systemPrompt + ` My interests are: ${interests}` }]
+        }
+      ]
     };
     try {
       const response = await axios.post(apiUrl, payload, {
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        headers: { 'x-goog-api-key': apiKey, 'Content-Type': 'application/json' },
       });
-      return response.data.choices[0].message.content.trim();
+      return response.data.candidates[0]?.content?.parts[0]?.text?.trim();
     } catch (error) {
-      console.error('OpenRouter API Error:', error);
+      console.error('Gemini API Error:', error);
       return 'Oops! Could not generate idea.';
     }
   };

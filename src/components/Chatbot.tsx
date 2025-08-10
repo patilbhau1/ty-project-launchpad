@@ -32,8 +32,8 @@ const Chatbot = ({ plan, onClose, onFinalize }: ChatbotProps) => {
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef(null);
 
-  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
-  const apiUrl = import.meta.env.VITE_OPENROUTER_API_URI;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  const apiUrl = import.meta.env.VITE_GEMINI_API_URI;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -60,26 +60,21 @@ const Chatbot = ({ plan, onClose, onFinalize }: ChatbotProps) => {
     const summarizeText = async (text: string): Promise<string> => {
     try {
       const response = await axios.post(apiUrl, {
-        model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
-        messages: [
-          { 
-            role: 'system', 
-            content: 'You are a helpful assistant that summarizes project requirements concisely.' 
-          },
+        contents: [
           { 
             role: 'user', 
-            content: `Summarize the following project requirements in 2-3 clear bullet points: ${text}` 
+            parts: [{ text: `You are a helpful assistant that summarizes project requirements concisely. Summarize the following project requirements in 2-3 clear bullet points: ${text}` }]
           }
         ],
       }, {
         headers: { 
-          Authorization: `Bearer ${apiKey}`, 
+          'x-goog-api-key': apiKey, 
           'Content-Type': 'application/json' 
         },
       });
       
-      return response.data.choices[0]?.message?.content?.trim() || 
-        "Here are the project requirements we discussed.";
+      return response.data.candidates[0]?.content?.parts[0]?.text?.trim() || 
+        "Here's a summary of your project requirements:";
     } catch (error) {
       console.error('Summarization API Error:', error);
       return "Here's a summary of your project requirements:";
@@ -118,21 +113,23 @@ const Chatbot = ({ plan, onClose, onFinalize }: ChatbotProps) => {
       const systemPrompt = `You are a helpful, concise, and friendly assistant for a company that provides project guidance. The user has selected the ${plan.name}. Your goal is to understand the user's project requirements. Ask clarifying questions to gather all necessary details. Be on-point and avoid lengthy responses. When you believe you have a complete understanding of the user's needs, end your response with the exact phrase "[FINALIZE]". Do not use this phrase at any other time.`;
 
       const payload = {
-        model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...newMessages.map(msg => ({ role: msg.role, content: msg.content })),
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: systemPrompt }]
+          },
+          ...newMessages.map(msg => ({ role: msg.role === 'assistant' ? 'model' : 'user', parts: [{ text: msg.content }] })),
         ],
       };
 
       const response = await axios.post(apiUrl, payload, {
         headers: { 
-          Authorization: `Bearer ${apiKey}`, 
+          'x-goog-api-key': apiKey, 
           'Content-Type': 'application/json' 
         },
       });
 
-      let botMessage = response.data.choices[0]?.message?.content?.trim() || "I'm sorry, I didn't get that. Could you please rephrase?";
+      let botMessage = response.data.candidates[0]?.content?.parts[0]?.text?.trim() || "I'm sorry, I didn't get that. Could you please rephrase?";
       
       // Check if the assistant suggests finalization
       if (botMessage.includes('[FINALIZE]')) {
