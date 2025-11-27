@@ -1,13 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PiHeartThin } from "react-icons/pi";
-import { ArrowLeft, CheckCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import { CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import emailjs from 'emailjs-com';
 
 const ApprovedIdeaPage = () => {
   const navigate = useNavigate();
@@ -45,11 +40,24 @@ const ApprovedIdeaPage = () => {
         alert("Failed to submit your approved idea. Please try again.");
         setIsSubmitting(false);
         return;
-      }
+      };
+
+      // 2. Send email via EmailJS
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          name: formData.name,
+          phone: formData.phone,
+          idea: formData.approvedIdea,
+        },
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
 
       // Success flow
       setIsSubmitted(true);
-      
+
       // Show success message and redirect after 3 seconds
       setTimeout(() => {
         setFormData({ name: '', phone: '', approvedIdea: '' });
